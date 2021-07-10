@@ -1,33 +1,17 @@
-import React from "react";
-
-import Header from "./Header";
-import Courses from "./Courses";
-import Total from "./Total";
-
-const App = () => {
-  const course = "Half Stack application development";
-  const parts = [
-    {
-      name: "Fundamentals of React",
-      exercises: 10,
-    },
-    {
-      name: "Using props to pass data",
-      exercises: 7,
-    },
-    {
-      name: "State of a component",
-      exercises: 14,
-    },
-  ];
+const App = ({ name, age }) => {
+  const bornYear = () => new Date().getFullYear() - age
 
   return (
     <div>
-      <Header course={course} />
-      <Courses parts={parts} />
-      <Total parts={parts} />
+      <p>
+        Hello {name}, you are {age} years old
+      </p>
+      <p>So you were probably born in {bornYear()}</p>
     </div>
-  );
-};
-
-export default App;
+  )
+}
+props = {
+  name: 'Arto Hellas',
+  age: 35,
+}
+export default App
