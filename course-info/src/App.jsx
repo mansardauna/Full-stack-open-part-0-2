@@ -1,17 +1,19 @@
-const App = ({ name, age }) => {
-  const bornYear = () => new Date().getFullYear() - age
+import React, { useState } from "react";
+const App = () => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
 
   return (
     <div>
-      <p>
-        Hello {name}, you are {age} years old
-      </p>
-      <p>So you were probably born in {bornYear()}</p>
+      {left}
+      <button onClick={() => setLeft(left + 1)}>
+        left
+      </button>
+      <button onClick={() => setRight(right + 1)}>
+        right
+      </button>
+      {right}
     </div>
-  )
-}
-props = {
-  name: 'Arto Hellas',
-  age: 35,
-}
+  );
+};
 export default App
