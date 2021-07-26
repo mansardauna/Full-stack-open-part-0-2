@@ -7,6 +7,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [showAll, setShowALl] = useState(true)
+  const [search, setSearch] = useState('')
 
   const addName = (event) => {
     event.preventDefault()
@@ -24,11 +25,9 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
-  const filters = showAll
-    ? persons
-    : persons.filter(person => person.name === true)
-  // setPersons(persons.concat(personObject))
-  // setNewName('')
+  const sort = persons.filter(person => {
+    return person.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  })
 
 
   return (
@@ -37,10 +36,10 @@ const App = () => {
       <form onSubmit={addName}>
         <div>
           filter:
-          {/* <input type="text" value={filters} /> */}
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         <div>
-          name: <input type='text' value={newName} onChange={handleNameChange} required />
+          name: <input type='text' value={newName} onChange={(e) => setNewName(e.target.value)} required />
           <br />
           nunber: <input type='text' value={newNum} onChange={(e) => setNewNum(e.target.value)} required />
         </div>
@@ -52,7 +51,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {filters.map((person, personIndex) => (
+        {sort.map((person, personIndex) => (
           <li key={`person-${personIndex}`}>{person.name} {person.number}</li>
         ))}
       </ul>
