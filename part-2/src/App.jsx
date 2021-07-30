@@ -45,7 +45,7 @@ const App = () => {
         </div>
         <div>
           <button onClick={() => setShowALl(!showAll)}>
-            show {showAll ? 'important' : 'all'}
+            show
           </button>
         </div>
       </form>
