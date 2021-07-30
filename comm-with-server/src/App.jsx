@@ -51,15 +51,18 @@ function App() {
 }
 
 const CountryDetail = (props) => {
-  const { name, flag } = props;
+  const { name, flag, languages, population } = props;
 
   return (
-    <>
-      <p>
-        <img src={flag} alt={name} style={{ width: "20px", height: "20px" }} />
-      </p>
-      <p>{name}</p>
-    </>
+    <p>
+      <h3>{name}</h3>
+
+      <div>
+        <img src={flag} alt={name} style={{ width: "4rem", height: "4rem" }} />
+      </div>
+      <div>Population: {population}</div>
+
+    </p>
   );
 };
 
