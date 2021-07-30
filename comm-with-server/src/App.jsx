@@ -51,7 +51,7 @@ function App() {
 }
 
 const CountryDetail = (props) => {
-  const { name, flag, languages, population } = props;
+  const { name, flag, capital, population } = props;
 
   return (
     <p>
@@ -60,6 +60,7 @@ const CountryDetail = (props) => {
       <div>
         <img src={flag} alt={name} style={{ width: "4rem", height: "4rem" }} />
       </div>
+      <div>capital: {capital}</div>
       <div>Population: {population}</div>
 
     </p>
