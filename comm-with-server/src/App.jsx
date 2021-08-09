@@ -62,6 +62,11 @@ const CountryDetail = (props) => {
       </div>
       <div>capital: {capital}</div>
       <div>Population: {population}</div>
+      <ul>
+        {country.languages.map((language, index) => (
+          <li key={`language ${index}`}>{language.name}</li>
+        ))}
+      </ul>
 
     </p>
   );
