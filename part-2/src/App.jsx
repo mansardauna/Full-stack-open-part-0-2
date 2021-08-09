@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    {
+      name: 'Arto Hellas'
+    }
   ])
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
@@ -16,6 +18,7 @@ const App = () => {
     if (!newName.trim()) return;
     if (persons.find((person) => person.name === newName.trim()))
       return alert(`${newName} is already added to phonebook `)
+
 
     setPersons(persons.concat({ name: newName, number: newNum }))
     setNewName('')
@@ -35,17 +38,18 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addName}>
         <div>
-          filter:
+          filter shown with
           <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
+        <h1>Add a new</h1>
         <div>
           name: <input type='text' value={newName} onChange={(e) => setNewName(e.target.value)} required />
           <br />
-          nunber: <input type='text' value={newNum} onChange={(e) => setNewNum(e.target.value)} required />
+          number: <input type='text' value={newNum} onChange={(e) => setNewNum(e.target.value)} required />
         </div>
         <div>
           <button onClick={() => setShowALl(!showAll)}>
-            show
+            add
           </button>
         </div>
       </form>
