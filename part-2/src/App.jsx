@@ -1,66 +1,113 @@
-import React, { useState } from 'react'
-
+import { useState, useEffect } from 'react';
+import Notification from './components/Notification';
+import content from './content';
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      name: 'Arto Hellas'
-    }
-  ])
-  const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState('')
-  const [showAll, setShowALl] = useState(true)
-  const [search, setSearch] = useState('')
-
-  const addName = (event) => {
-    event.preventDefault()
-    console.log('button clicked', event.target)
-
-    if (!newName.trim()) return;
-    if (persons.find((person) => person.name === newName.trim()))
-      return alert(`${newName} is already added to phonebook `)
-
-
-    setPersons(persons.concat({ name: newName, number: newNum }))
-    setNewName('')
-    setNewNum('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newNum, setNewNum] = useState('');
+  const [search, searchBy] = useState('')
+  const [sucess, setSucess] = useState('')
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const finder = persons.filter((person) => person.name === newName.trim())
+    finder.length ? (
+      <>
+        {window.confirm('This name already exists,replace the old numbers') === true
+          ? content.update(finder[0].id, { name: newName, number: newNum }).then((value) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== finder[0].id ? person : value
+              )
+            );
+          }
+          )
+            .catch((err) => {
+              setSucess('name has already be deleted from the server')
+              setTimeout(() => {
+                setSucess('')
+              }, 2000);
+            })
+          : ''}
+      </>
+    ) : (
+      content
+        .create({ name: newName, number: newNum })
+        .then(data => {
+          setPersons(persons.concat(data))
+          setSucess('added new name')
+          setTimeout(() => {
+            setSucess('')
+          }, 5000);
+        })
+    )
+  };
+  const handleNoteChange = (e) => {
+    setNewName(e.target.value)
   }
-  const handleNameChange = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
+  const filterWith = (e) => {
+    searchBy(e.target.value)
+    setPersons(persons.filter(({ name }) => name.toLowerCase().includes(search.toLowerCase())))
   }
-  const sort = persons.filter(person => {
-    return person.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-  })
-
-
+  useEffect(() => {
+    content
+      .getAll()
+      .then((initialNotes) => {
+        console.log('promise fulfilled');
+        setPersons(initialNotes)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
+  const toggleImportanceOf = ids => {
+    content
+      .deletePerson(ids)
+      .then(returnedNote => {
+        setPersons(persons.filter(({ id }) => id !== ids))
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          filter shown with
-          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
-        </div>
-        <h1>Add a new</h1>
-        <div>
-          name: <input type='text' value={newName} onChange={(e) => setNewName(e.target.value)} required />
-          <br />
-          number: <input type='text' value={newNum} onChange={(e) => setNewNum(e.target.value)} required />
-        </div>
-        <div>
-          <button onClick={() => setShowALl(!showAll)}>
-            add
-          </button>
-        </div>
+      <h2>PhoneBook</h2>
+      <Notification message={sucess} />
+      <h2>add a new</h2>
+      <div>filter shown with
+        <input
+          type='text'
+          value={search}
+          onChange={filterWith}
+          required
+        />
+      </div>
+      <br />
+      <br />
+      <form onSubmit={handleSubmit}>
+        <div>name : <input
+          type='text'
+          value={newName}
+          onChange={handleNoteChange}
+          required
+        /></div>
+        {/* <br/>  */}
+        <div>number : <input
+          type='text'
+          value={newNum}
+          onChange={(e) => setNewNum(e.target.value)}
+          required
+        /></div>
+        <br />
+        <button>add</button>
+        <br />
       </form>
       <h2>Numbers</h2>
       <ul>
-        {sort.map((person, personIndex) => (
-          <li key={`person-${personIndex}`}>{person.name} {person.number}</li>
-        ))}
+        {
+          persons.map((person, personIndex) =>
+            <li key={`list${personIndex}`}>{person.name} {person.number}  <button onClick={() => toggleImportanceOf(person.id)}>Delete</button></li>
+          )}
       </ul>
     </div>
-  )
-}
-
-export default App
+  );
+};
+export default App;
