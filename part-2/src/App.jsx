@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Notification from './components/Notification';
+import Notification from './Notification';
 import content from './content';
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -56,7 +56,7 @@ const App = () => {
         setPersons(initialNotes)
       })
   }, [])
-  console.log('render', persons.length, 'persons')
+  // console.log('render', persons.length, 'persons')
   const toggleImportanceOf = ids => {
     content
       .deletePerson(ids)
@@ -110,4 +110,4 @@ const App = () => {
     </div>
   );
 };
-export default App;
+export default App
